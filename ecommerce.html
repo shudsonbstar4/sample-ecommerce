@@ -36,6 +36,29 @@
 
 			};
 
+			var changeRoute = function(route){
+				switch(route){
+					case 'home':
+						console.log("Going home");
+						//get id of div and load template into it
+						break;
+					case 'product':
+						console.log("Product");
+						//get id of div and load template
+						break;
+					default:
+						console.log("DEfault home");
+						//get id of home div
+				};
+			};
+
+			var loadPage = function(route){
+				changeRoute(route);
+				loadCart();
+			};
+			loadPage('home');
+
+
 			var calcNumOfItems = function(){
 				var numOfItems = document.getElementById('cart_items').innerHTML;
 				numOfItems = parseInt(numOfItems, 10); //Parsed for calculation
@@ -77,12 +100,13 @@
 			
 		</script>
 	</head>
-	<body onload="loadCart();">
+	<body>
 		<nav class="navbar navbar-inverse">
 			<div class="container">
 				<div class="navbar-header">
 					<ul class="nav navbar-nav navbar-left">
-						<li><a class="navbar-brand" href="#">Logo</a></li>
+						<li><a class="navbar-brand" href="" onclick="changeRoute('home')">Logo</a></li>
+						<li><a href onclick="changeRoute('home')">Home</a></li>
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
 						<li><a href="#" onclick="openCart()"><i class="glyphicon glyphicon-shopping-cart"></i> <span class="badge" id="cart_items"></span></a> </li> <!--color changes to red when add something to the cart?-->
@@ -95,7 +119,7 @@
 			<div class="row">
 				<div class="col-md-4">
 					<h3>Product 1</h3>
-					<a href="#" class="thumbnail">
+					<a href="" class="thumbnail" onclick="changeRoute('product')">
 				      <img src="http://placehold.it/350x200" alt="Product 1">
 				    </a>
 				    <a href="#" onclick="addCartItems('Product 1')" class="btn btn-success">Add to cart</a>
