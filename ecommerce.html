@@ -3,128 +3,43 @@
 		<title>Chapter 3 - Ecommerce Shopping Cart</title>
 		<link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet" />
 		<script type="text/javascript" src="cookie.js"></script>
-		<!--<script type="text/javascript" src="cart.js"></script>-->
 		<script type="text/javascript">
 
-			var getCartLength = function(){
-				var cartArray = window.sessionStorage.getItem('cart');
-				cartArray = cartArray.split(",");
+			function loadScript(url, callback){
+			    var script = document.createElement("script")
+			    script.type = "text/javascript";
 
-				if(cartArray.indexOf('null') !== -1){
-					cartArray.splice(cartArray.indexOf('null'), 1);
-				};
-
-				numOfItems = cartArray.length;
+			    if (script.readyState){  //IE
+			        script.onreadystatechange = function(){
+			            if (script.readyState == "loaded" ||
+			                    script.readyState == "complete"){
+			                script.onreadystatechange = null;
+			                callback();
+			            }
+			        };
+			    } else {  //Others
+			        script.onload = function(){
+			            callback();
+			        };
+			    }
+			    script.src = url;
+			    document.getElementsByTagName("head")[0].appendChild(script);
 			};
 
-			var loadCart = function(){
-				if(window.sessionStorage){
-          			if(window.sessionStorage.getItem('cart') === undefined || window.sessionStorage.getItem('cart')=== "null" || window.sessionStorage.getItem('cart') === null){
-          				window.sessionStorage.setItem('cart', null);
-          				numOfItems = 0;
-          			} else {
-          				getCartLength();
-          			}
-          		};
+			var getFiles = function(){
+				var urlArray = ['routes.js', 'cart.js'];
 
-          		console.log("NUM OF ITEMS " + numOfItems);
-
-          		if(numOfItems === '' || numOfItems === undefined || numOfItems === null){
-					document.getElementById('cart_items').innerHTML = "0";
-				} else {
-					document.getElementById('cart_items').innerHTML = numOfItems;
-				}
-
-			};
-
-			//This function takes a templateUrl and any params to pass through (like product, id, etc) and opens a new XMLHttpRequest for that request to get the route, then swaps out the template partial in the content div. It also changes the title for the product page - this will need to be moved later
-			var handleRoute = function(templateUrl, routeParams){
-				var xhr = new XMLHttpRequest();
-				xhr.open('GET', templateUrl, true);
-				xhr.onreadystatechange = function(){
-					if(this.readyState !== 4){ //If the state isn't read
-						return;
-					} else if (this.status !== 200) { //If the status returned is an error
-						return;
-					} else {
-						document.getElementById('content').innerHTML = this.responseText; //push partial into content div
-
-						if(templateUrl.indexOf('product.html') !== -1){ //if the route is the product page
-							document.getElementById('product_title').innerHTML = routeParams; //Add the routeParams (id)
-						};
-					};
-				};
-				xhr.send(); //send request
-			};
-
-			var changeRoute = function(route, e, routeParams){
-				if(e){ //If it is a mouseclick event
-					e.preventDefault(); //Prevent <a> tag from firing default event, which is to redirect page, so can swap out partials
-				};
-
-				switch(route){ //Switch case matches routes
-					case 'home':
-						var templateUrl = 'home.html?' + Math.random(); //Math.random() is used to append a random generated number as a param in the request, making it seem to the browser as though a new page is being requested and forcing browser to check for new content, instead of caching old HTML
-						handleRoute(templateUrl, routeParams);
-						break;
-					case 'product':
-						var templateUrl = 'product.html?' + Math.random() + "id=" + routeParams;
-						handleRoute(templateUrl, routeParams);
-						break;
-					case 'checkout':
-						var templateUrl = 'checkout.html?' + Math.random();
-						handleRoute(templateUrl, routeParams);
-						break;
-					default:
-						var templateUrl = 'home.html?' + Math.random();
-						handleRoute(templateUrl, routeParams);
+				for(var a = 0; a < urlArray.length; a++){
+					loadScript(urlArray[a], function(){
+					    //initialization code
+					});
 				};
 			};
+			getFiles();
 
 			var loadPage = function(route, event){ //This function is used onload to not only load the default home partial, but also to load the cart items
 				changeRoute(route, event);
 				loadCart();
-			};
-
-
-			var calcNumOfItems = function(){
-				var numOfItems = document.getElementById('cart_items').innerHTML;
-				numOfItems = parseInt(numOfItems, 10); //Parsed for calculation
-				numOfItems = numOfItems + 1;
-				console.log("HELLO CART " + document.getElementById('cart_items'));
-				document.getElementById('cart_items').innerHTML = numOfItems;
-
-			};
-
-			var changeBadgeStyle = function(){
-				document.getElementById('cart_items').style.transition = "all 1s";
-				document.getElementById('cart_items').style.backgroundColor = "red";
-				setTimeout(function(){
-					document.getElementById('cart_items').style.transition = "all 1s";
-					document.getElementById('cart_items').style.backgroundColor = "#777";
-				}, 5 * 1000); //timeout the red color
-			};
-
-			var addCartItems = function(item){
-				calcNumOfItems();
-				changeBadgeStyle();
-				window.sessionStorage.setItem('cart', window.sessionStorage.getItem('cart') + "," + item);
-			};
-
-			var openCart = function(){
-				var cartArray = window.sessionStorage.getItem('cart');
-  				console.log("CART ARRAY " + cartArray);
-  				cartArray = cartArray.split(",");
-
-  				if(cartArray.indexOf('null') !== -1){
-  					cartArray.splice(cartArray.indexOf('null'), 1);
-  				}
-
-				if(cartArray.length > 0){
-					alert("You have " + cartArray.length + " items in your cart: " + cartArray);
-				} else {
-					alert("You have 0 items in your cart.");
-				}
 			};
 
 		</script>

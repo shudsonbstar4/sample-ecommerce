@@ -1,4 +1,3 @@
-//Will wire this up later, so won't have inline scripting
 var getCartLength = function(){
 	var cartArray = window.sessionStorage.getItem('cart');
 	cartArray = cartArray.split(",");
@@ -29,6 +28,7 @@ var loadCart = function(){
 	}
 
 };
+
 
 var calcNumOfItems = function(){
 	var numOfItems = document.getElementById('cart_items').innerHTML;
